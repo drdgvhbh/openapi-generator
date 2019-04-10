@@ -312,8 +312,10 @@ public class DefaultCodegen implements CodegenConfig {
                     Either<String, Integer> enumValue = toEnumValue(value.toString(), cm.dataType);
                     if (enumValue.isLeft()) {
                         enumVar.put("value", enumValue.left().value());
+                        enumVar.put("jsonValue", enumValue.left().value().toString());
                     } else {
                         enumVar.put("value", enumValue.right().value());
+                        enumVar.put("jsonValue", "\"" + enumValue.right().value().toString() + "\"");
                     }
                     enumVar.put("isString", isDataTypeString(cm.dataType));
                     enumVars.add(enumVar);
@@ -4032,8 +4034,10 @@ public class DefaultCodegen implements CodegenConfig {
             Either<String, Integer> enumValue = toEnumValue(value.toString(), dataType);
             if (enumValue.isLeft()) {
                 enumVar.put("value", enumValue.left().value());
+                enumVar.put("jsonValue", enumValue.left().value().toString());
             } else {
                 enumVar.put("value", enumValue.right().value());
+                enumVar.put("jsonValue", "\"" + enumValue.right().value().toString() + "\"");
             }
             enumVar.put("isString", isDataTypeString(dataType));
             enumVars.add(enumVar);
