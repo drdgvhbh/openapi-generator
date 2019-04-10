@@ -20,6 +20,7 @@ package org.openapitools.codegen;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.CaseFormat;
 import com.samskivert.mustache.Mustache.Compiler;
+import fj.data.Either;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -307,7 +308,13 @@ public class DefaultCodegen implements CodegenConfig {
                         }
                     }
                     enumVar.put("name", toEnumVarName(enumName, cm.dataType));
-                    enumVar.put("value", toEnumValue(value.toString(), cm.dataType));
+
+                    Either<String, Integer> enumValue = toEnumValue(value.toString(), cm.dataType);
+                    if (enumValue.isLeft()) {
+                        enumVar.put("value", enumValue.left().value());
+                    } else {
+                        enumVar.put("value", enumValue.right().value());
+                    }
                     enumVar.put("isString", isDataTypeString(cm.dataType));
                     enumVars.add(enumVar);
                 }
@@ -391,11 +398,11 @@ public class DefaultCodegen implements CodegenConfig {
      * @param datatype data type
      * @return the sanitized value for enum
      */
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         if ("number".equalsIgnoreCase(datatype)) {
-            return value;
+            return Either.left(value);
         } else {
-            return "\"" + escapeText(value) + "\"";
+            return Either.left("\"" + escapeText(value) + "\"");
         }
     }
 
@@ -4021,7 +4028,13 @@ public class DefaultCodegen implements CodegenConfig {
             }
 
             enumVar.put("name", toEnumVarName(enumName, dataType));
-            enumVar.put("value", toEnumValue(value.toString(), dataType));
+
+            Either<String, Integer> enumValue = toEnumValue(value.toString(), dataType);
+            if (enumValue.isLeft()) {
+                enumVar.put("value", enumValue.left().value());
+            } else {
+                enumVar.put("value", enumValue.right().value());
+            }
             enumVar.put("isString", isDataTypeString(dataType));
             enumVars.add(enumVar);
         }
@@ -4036,14 +4049,20 @@ public class DefaultCodegen implements CodegenConfig {
         // handle default value for enum, e.g. available => StatusEnum.AVAILABLE
         if (var.defaultValue != null) {
             String enumName = null;
-            final String enumDefaultValue;
+            final Either<String, Integer> enumDefaultValue;
             if ("string".equalsIgnoreCase(dataType)) {
                 enumDefaultValue = toEnumValue(var.defaultValue, dataType);
             } else {
-                enumDefaultValue = var.defaultValue;
+                enumDefaultValue = Either.left(var.defaultValue);
             }
             for (Map<String, Object> enumVar : enumVars) {
-                if (enumDefaultValue.equals(enumVar.get("value"))) {
+                Object defaultValue;
+                if (enumDefaultValue.isLeft()) {
+                    defaultValue = enumDefaultValue.left().value();
+                } else {
+                    defaultValue = enumDefaultValue.right().value();
+                }
+                if (defaultValue.equals(enumVar.get("value"))) {
                     enumName = (String) enumVar.get("name");
                     break;
                 }

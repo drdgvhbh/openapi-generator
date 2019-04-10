@@ -18,6 +18,7 @@
 package org.openapitools.codegen.languages;
 
 import com.google.common.base.Strings;
+import fj.data.Either;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.MapSchema;
@@ -547,17 +548,17 @@ public abstract class AbstractApexCodegen extends DefaultCodegen implements Code
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         if ("Integer".equals(datatype) || "Double".equals(datatype)) {
-            return value;
+            return Either.left(value);
         } else if ("Long".equals(datatype)) {
             // add l to number, e.g. 2048 => 2048l
-            return value + "l";
+            return Either.left(value + "l");
         } else if ("Float".equals(datatype)) {
             // add f to number, e.g. 3.14 => 3.14f
-            return value + "f";
+            return Either.left(value + "f");
         } else {
-            return "\"" + escapeText(value) + "\"";
+            return Either.left("\"" + escapeText(value) + "\"");
         }
     }
 

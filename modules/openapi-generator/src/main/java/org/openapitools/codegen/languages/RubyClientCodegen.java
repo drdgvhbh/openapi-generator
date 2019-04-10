@@ -17,6 +17,7 @@
 
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
@@ -395,11 +396,11 @@ public class RubyClientCodegen extends AbstractRubyCodegen {
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         if ("Integer".equals(datatype) || "Float".equals(datatype)) {
-            return value;
+            return Either.left(value);
         } else {
-            return "\"" + escapeText(value) + "\"";
+            return Either.left("\"" + escapeText(value) + "\"");
         }
     }
 

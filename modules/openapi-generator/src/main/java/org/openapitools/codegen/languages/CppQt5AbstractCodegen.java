@@ -1,5 +1,6 @@
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.parser.util.SchemaTypeUtil;
@@ -335,8 +336,8 @@ public class CppQt5AbstractCodegen extends AbstractCppCodegen implements Codegen
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
-        return escapeText(value);
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
+        return Either.left(escapeText(value));
     }
     
     @Override

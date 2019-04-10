@@ -17,6 +17,7 @@
 
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.io.FilenameUtils;
@@ -670,19 +671,19 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
-        if ("kotlin.Int".equals(datatype) || "kotlin.Long".equals(datatype)) {
-            return value;
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
+        if ("kotlin.Int".equals(datatype) || "kotlin.Long".equals(datatype) || "Int".equals(datatype)) {
+            return Either.right(Integer.parseInt(value));
         } else if ("kotlin.Double".equals(datatype)) {
             if (value.contains(".")) {
-                return value;
+                return Either.left(value);
             } else {
-                return value + ".0"; // Float and double must have .0
+                return Either.left(value + ".0"); // Float and double must have .0
             }
         } else if ("kotlin.Float".equals(datatype)) {
-            return value + "f";
+            return Either.left(value + "f");
         } else {
-            return "\"" + escapeText(value) + "\"";
+            return Either.left("\"" + escapeText(value) + "\"");
         }
     }
 

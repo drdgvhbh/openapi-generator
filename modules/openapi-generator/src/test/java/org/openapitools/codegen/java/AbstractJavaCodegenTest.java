@@ -150,10 +150,10 @@ public class AbstractJavaCodegenTest {
     @Test
     public void toEnumValue(){
         final AbstractJavaCodegen codegen = new P_AbstractJavaCodegen();
-        Assert.assertEquals(codegen.toEnumValue("1", "Integer"), "1");
-        Assert.assertEquals(codegen.toEnumValue("42", "Double"), "42");
-        Assert.assertEquals(codegen.toEnumValue("1337", "Long"), "1337l");
-        Assert.assertEquals(codegen.toEnumValue("3.14", "Float"), "3.14f");
+        Assert.assertEquals(codegen.toEnumValue("1", "Integer").left().value(), "1");
+        Assert.assertEquals(codegen.toEnumValue("42", "Double").left().value(), "42");
+        Assert.assertEquals(codegen.toEnumValue("1337", "Long").left().value(), "1337l");
+        Assert.assertEquals(codegen.toEnumValue("3.14", "Float").left().value(), "3.14f");
     }
 
     @Test

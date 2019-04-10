@@ -51,13 +51,14 @@ public class AbstractKotlinCodegenTest {
 
     @Test
     public void toEnumValue(){
-        assertEquals(codegen.toEnumValue("1", "kotlin.Int"), "1");
-        assertEquals(codegen.toEnumValue("1", "kotlin.Double"), "1.0");
-        assertEquals(codegen.toEnumValue("1.3", "kotlin.Double"), "1.3");
-        assertEquals(codegen.toEnumValue("1337", "kotlin.Long"), "1337");
-        assertEquals(codegen.toEnumValue("5", "kotlin.Float"), "5f");
-        assertEquals(codegen.toEnumValue("1.0", "kotlin.Float"), "1.0f");
-        assertEquals(codegen.toEnumValue("data", "Something"), "\"data\"");
+        assertEquals(codegen.toEnumValue("1", "Int").right().value(), Integer.valueOf(1));
+        assertEquals(codegen.toEnumValue("1", "kotlin.Int").right().value(), Integer.valueOf(1));
+        assertEquals(codegen.toEnumValue("1", "kotlin.Double").left().value(), "1.0");
+        assertEquals(codegen.toEnumValue("1.3", "kotlin.Double").left().value(), "1.3");
+        assertEquals(codegen.toEnumValue("1337", "kotlin.Long").right().value(), Integer.valueOf("1337"));
+        assertEquals(codegen.toEnumValue("5", "kotlin.Float").left().value(), "5f");
+        assertEquals(codegen.toEnumValue("1.0", "kotlin.Float").left().value(), "1.0f");
+        assertEquals(codegen.toEnumValue("data", "Something").left().value(), "\"data\"");
     }
 
     private class P_AbstractKotlinCodegen extends AbstractKotlinCodegen {

@@ -19,6 +19,7 @@ package org.openapitools.codegen.languages;
 
 import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
+import fj.data.Either;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
@@ -990,16 +991,16 @@ public abstract class AbstractCSharpCodegen extends DefaultCodegen implements Co
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         // C# only supports enums as literals for int, int?, long, long?, byte, and byte?. All else must be treated as strings.
         // Per: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/enum
         // The approved types for an enum are byte, sbyte, short, ushort, int, uint, long, or ulong.
         // but we're not supporting unsigned integral types or shorts.
         if (datatype.startsWith("int") || datatype.startsWith("long") || datatype.startsWith("byte")) {
-            return value;
+            return Either.left(value);
         }
 
-        return escapeText(value);
+        return Either.left(escapeText(value));
     }
 
     @Override

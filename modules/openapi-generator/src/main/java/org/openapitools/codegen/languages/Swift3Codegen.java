@@ -17,6 +17,7 @@
 
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.io.FilenameUtils;
@@ -567,8 +568,8 @@ public class Swift3Codegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
-        return String.valueOf(value);
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
+        return Either.left(String.valueOf(value));
     }
 
     @Override

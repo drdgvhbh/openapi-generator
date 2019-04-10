@@ -17,6 +17,7 @@
 
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.io.FilenameUtils;
@@ -389,7 +390,8 @@ public class DartClientCodegen extends DefaultCodegen implements CodegenConfig {
                 }
             }
             enumVar.put("name", toEnumVarName(enumName, cm.dataType));
-            enumVar.put("value", toEnumValue(value.toString(), cm.dataType));
+            enumVar.put("value", toEnumValue(
+                    value.toString(), cm.dataType).left().value());
             enumVars.add(enumVar);
         }
         cm.allowableValues.put("enumVars", enumVars);
@@ -420,7 +422,7 @@ public class DartClientCodegen extends DefaultCodegen implements CodegenConfig {
             }
             enumVar.put("name", name);
             enumVar.put("value", toEnumValue(
-                    value.get("numericValue").toString(), cm.dataType));
+                    value.get("numericValue").toString(), cm.dataType).left().value());
             if (value.containsKey("description")) {
                 enumVar.put("description", value.get("description").toString());
             }
@@ -444,12 +446,12 @@ public class DartClientCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         if ("number".equalsIgnoreCase(datatype) ||
                 "int".equalsIgnoreCase(datatype)) {
-            return value;
+            return Either.left(value);
         } else {
-            return "\"" + escapeText(value) + "\"";
+            return Either.left("\"" + escapeText(value) + "\"");
         }
     }
 

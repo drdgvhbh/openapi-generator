@@ -16,6 +16,7 @@
 
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Schema;
@@ -417,18 +418,18 @@ public class CLibcurlClientCodegen extends DefaultCodegen implements CodegenConf
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         value = value.replaceAll("-","_");
         if (isReservedWord(value)) {
             value = escapeReservedWord(value);
         }
         if ("Integer".equals(datatype) || "Float".equals(datatype)) {
-            return value;
+            return Either.left(value);
         } else {
             if (value.matches("\\d.*")) { // starts with number
-                return escapeReservedWord(escapeText(value));
+                return Either.left(escapeReservedWord(escapeText(value)));
             } else {
-                return escapeText(value);
+                return Either.left(escapeText(value));
             }
         }
     }

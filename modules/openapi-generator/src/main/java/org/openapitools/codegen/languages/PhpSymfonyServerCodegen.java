@@ -17,6 +17,7 @@
 
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.lang3.StringUtils;
@@ -562,11 +563,11 @@ public class PhpSymfonyServerCodegen extends AbstractPhpCodegen implements Codeg
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         if ("int".equals(datatype) || "double".equals(datatype) || "float".equals(datatype)) {
-            return value;
+            return Either.left(value);
         } else {
-            return "\"" + escapeText(value) + "\"";
+            return Either.left("\"" + escapeText(value) + "\"");
         }
     }
 

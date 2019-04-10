@@ -17,6 +17,7 @@
 
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
@@ -335,7 +336,7 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
             if (!isFirst) {
                 b.append(" | ");
             }
-            b.append(toEnumValue(value.toString(), dataType));
+            b.append(toEnumValue(value.toString(), dataType).left().value());
             isFirst = false;
         }
         return b.toString();
@@ -454,11 +455,11 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         if ("number".equals(datatype)) {
-            return value;
+            return Either.left(value);
         } else {
-            return "\'" + escapeText(value) + "\'";
+            return Either.left("\'" + escapeText(value) + "\'");
         }
     }
 

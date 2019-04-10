@@ -17,6 +17,7 @@
 
 package org.openapitools.codegen.languages;
 
+import fj.data.Either;
 import org.openapitools.codegen.CodegenConstants;
 import org.openapitools.codegen.CodegenProperty;
 import org.openapitools.codegen.CodegenType;
@@ -207,12 +208,12 @@ public class EiffelClientCodegen extends AbstractEiffelCodegen {
     }
 
     @Override
-    public String toEnumValue(String value, String datatype) {
+    public Either<String, Integer> toEnumValue(String value, String datatype) {
         if ("INTEGER_32".equals(datatype) || "INTEGER_64".equals(datatype) ||
                 "REAL_32".equals(datatype) || "REAL_64".equals(datatype)) {
-            return value;
+            return Either.left(value);
         } else {
-            return "\"" + escapeText(value) + "\"";
+            return Either.left("\"" + escapeText(value) + "\"");
         }
     }
 
